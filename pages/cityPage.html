@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Weather App KPI</title>
+
+<style>
+a {
+    text-decoration: none;
+    color: #f2f3f5;
+}
+
+body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:#f2f3f5;
+}
+
+/* заголовок */
+.header{
+    text-align:center;
+    padding:40px 20px;
+}
+
+.header h1{
+    margin:0;
+    font-size:42px;
+    color:#2c3e50;
+}
+
+/* контейнер */
+.wrapper{
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+/* картка */
+.card{
+    background:#ececec;
+
+    width:90%;
+    max-width:550px;
+
+    text-align:center;
+
+    padding:40px;
+
+    border-radius:10px;
+
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* місто */
+.city{
+    font-size:34px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+/* іконка */
+.weather-icon{
+    font-size:40px;
+    margin-bottom:15px;
+}
+
+/* опис */
+.description{
+    font-size:20px;
+    color:#444;
+    margin-bottom:25px;
+}
+
+/* погодні дані */
+.weather-info{
+    font-size:20px;
+    line-height:1.9;
+}
+
+/* кнопка */
+.btn{
+    margin-top:30px;
+
+    padding:12px 26px;
+
+    font-size:18px;
+
+    border:none;
+    background:#1e73d8;
+    color:white;
+
+    cursor:pointer;
+
+    border-radius:4px;
+}
+
+.btn:hover{
+    background:#1559a8;
+}
+
+</style>
+
+<script>
+async function loadWeather() {
+    const params = new URLSearchParams(window.location.search);
+    const city = params.get("city") || "Kyiv";
+
+    try {
+        const res = await fetch("/getWeather", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ city })
+        });
+
+        const data = await res.json();
+
+        document.querySelector(".city").textContent = city;
+
+        document.querySelector(".description").textContent = data.weather_desc;
+
+        document.querySelector(".weather-icon").textContent = data.emoji
+
+        document.querySelector(".weather-info").innerHTML = `
+            <div><strong>Weather:</strong> ${data.weather}</div>
+            <div><strong>Description:</strong> ${data.weather_desc}</div>
+            <div><strong>Temperature:</strong> ${data.temperature}°C</div>
+            <div><strong>Feels like:</strong> ${data.feels_like}°C</div>
+            <div><strong>Min temperature:</strong> ${data.temp_min}°C</div>
+            <div><strong>Max temperature:</strong> ${data.temp_max}°C</div>
+            <div><strong>Pressure:</strong> ${data.pressure} hPa</div>
+        `;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+window.onload = loadWeather;
+</script>
+
+</head>
+
+
+<body>
+
+<div class="header">
+<h1>Weather App KPI</h1>
+</div>
+
+<div class="wrapper">
+
+<div class="card">
+
+<div class="city"></div>
+
+<div class="weather-icon"></div>
+
+<div class="description">
+overcast clouds
+</div>
+
+<div class="weather-info">
+<div></div>
+<div></div>
+<div></div>
+</div>
+
+<button class="btn">
+    <a href="./mainPage.html">Back to Home</a>
+</button>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
