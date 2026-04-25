@@ -2,10 +2,12 @@ require("dotenv").config();
 const API_KEY = process.env.API_KEY;
 const path = require("path");
 const express = require("express");
+const { swaggerDocument, swaggerUi } = require("./swagger");
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "pages")));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./pages/mainPage.html"));
